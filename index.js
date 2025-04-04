@@ -23,10 +23,15 @@ app.listen(PORT, () => {
 });
 
 // Prevent Render from sleeping
-const keepAliveURL = `https://express-user-ccqv.onrender.com`;
+const keepAliveURL = "https://express-user-ccqv.onrender.com";
 
-setInterval(() => {
-  axios.get(keepAliveURL)
-    .then(() => console.log("Keep-alive request sent"))
-    .catch(err => console.error("Keep-alive request failed:", err.message));
-}, 30000); // Every 30 seconds
+setTimeout(() => {
+  setInterval(async () => {
+    try {
+      const response = await axios.get(keepAliveURL);
+      console.log("Keep-alive request sent. Status:", response.status);
+    } catch (err) {
+      console.error("Keep-alive request failed:", err.message);
+    }
+  }, 30000); // Every 30 seconds
+}, 10000);
