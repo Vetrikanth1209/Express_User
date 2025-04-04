@@ -17,54 +17,51 @@ const CONSUL_SERVICE_NAME = "Express_User";
 const SERVICE_HOST = "express-user-ccqv.onrender.com";
 const SERVICE_PORT = 7000;
 
-// Register service in Consul
-const registerService = () => {
-  consul.agent.service.register(
-    {
+// Register service in Consul with error handling
+const registerService = async () => {
+  try {
+    await consul.agent.service.register({
       id: CONSUL_SERVICE_ID,
       name: CONSUL_SERVICE_NAME,
       address: SERVICE_HOST,
       port: SERVICE_PORT,
-    },
-    (err) => {
-      if (err) {
-        console.error("❌ Consul registration failed:", err.message);
-      } else {
-        console.log("✅ User Service successfully registered in Consul");
-      }
-    }
-  );
+    });
+    console.log("✅ User Service successfully registered in Consul");
+  } catch (err) {
+    console.error("❌ Consul registration failed:", err.message);
+    // Don’t crash; retry later
+  }
 };
 
-// Keep Consul connection alive
-setInterval(() => {
-  consul.agent.self((err, result) => {
-    if (err) {
-      console.error("❌ Consul connection lost. Reconnecting...");
-      registerService();
-    } else {
-      console.log("✅ Consul connection is active.");
-    }
-  });
-}, 30000);
+// Keep Consul connection alive with error handling
+const checkConsulConnection = async () => {
+  try {
+    await consul.agent.self();
+    console.log("✅ Consul connection is active.");
+  } catch (err) {
+    console.error("❌ Consul connection lost. Attempting to reconnect...");
+    await registerService(); // Retry registration
+  }
+};
 
-// Initial registration
+// Initial registration and periodic check
 registerService();
+setInterval(checkConsulConnection, 30000); // Every 30 seconds
 
 // Graceful shutdown
 process.on("SIGINT", async () => {
   try {
     await consul.agent.service.deregister(CONSUL_SERVICE_ID);
     console.log("✅ User Service deregistered from Consul");
-    process.exit();
+    process.exit(0);
   } catch (err) {
     console.error("❌ Error deregistering service:", err.message);
     process.exit(1);
   }
 });
 
-// Export Consul instance or middleware if needed
+// Export middleware
 module.exports = (req, res, next) => {
-  req.consul = consul; // Optionally attach consul to request object
+  req.consul = consul; // Attach consul to request object
   next();
 };
