@@ -46,7 +46,7 @@ const checkConsulConnection = async () => {
 
 // Initial registration and periodic check
 registerService();
-setInterval(checkConsulConnection, 30000); // Every 30 seconds
+setInterval(checkConsulConnection, 300000); // Every 30 seconds
 
 // Graceful shutdown
 process.on("SIGINT", async () => {
