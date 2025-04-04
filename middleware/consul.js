@@ -4,8 +4,8 @@ const CONSUL_HOST = "consul-hn1i.onrender.com";
 const CONSUL_PORT = 443;
 
 const consul = new Consul({
-  host: CONSUL_HOST,
-  port: CONSUL_PORT,
+  host: "consul-hn1i.onrender.com",
+  port: 443,
   promisify: true,
   secure: true,
   timeout: 300000,
