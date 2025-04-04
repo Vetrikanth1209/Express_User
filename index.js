@@ -21,3 +21,12 @@ app.use("/user", user);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// Prevent Render from sleeping
+const keepAliveURL = `https://express-user-ccqv.onrender.com`;
+
+setInterval(() => {
+  axios.get(keepAliveURL)
+    .then(() => console.log("Keep-alive request sent"))
+    .catch(err => console.error("Keep-alive request failed:", err.message));
+}, 30000); // Every 30 seconds
