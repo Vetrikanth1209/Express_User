@@ -1,7 +1,5 @@
 const Consul = require("consul");
 
-const CONSUL_HOST = "consul-hn1i.onrender.com";
-const CONSUL_PORT = 443;
 
 const consul = new Consul({
   host: "consul-hn1i.onrender.com",
