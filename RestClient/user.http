@@ -23,7 +23,7 @@ Content-Type: application/json
 }
 
 ### Get All Users
-GET http://localhost:7000/user/read_all_users
+GET https://express-user-ccqv.onrender.com/user/read_all_users
 
 ### Get User by ID
 GET http://localhost:7000/user/get_user_by_id/b9a1c3c6-b074-49ef-86e6-b73de4305f1c

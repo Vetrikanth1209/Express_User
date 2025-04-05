@@ -39,7 +39,7 @@ setTimeout(() => {
   setInterval(() => {
     sendKeepAlive(KEEP_ALIVE_URL, "Express app");
     sendKeepAlive(CONSUL_URL, "Consul");
-  }, 30000); // Every 5 minutes
+  }, 240000); // Every 5 minutes
 }, 10000);
 
 // Start Server
